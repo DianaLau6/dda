@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const ctx = canvas.getContext('2d');
   const tableRounded = document.querySelector('#tableRounded tbody');
   const tableDecimal = document.querySelector('#tableDecimal tbody');
+  const slopeDisplay = document.getElementById('slopeDisplay'); // Contenedor para la pendiente
 
   const padding = 20; // Espacio adicional alrededor del gráfico
   const canvasWidth = canvas.width;
@@ -19,6 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const y1 = parseFloat(document.getElementById('y1').value);
     const x2 = parseFloat(document.getElementById('x2').value);
     const y2 = parseFloat(document.getElementById('y2').value);
+
+    // Evitar división entre 0
+    if (x2 === x1) {
+      alert("No se puede calcular la pendiente: X1 y X2 son iguales.");
+      return;
+    }
+
+    // Calcular la pendiente
+    const dy = y2 - y1;
+    const dx = x2 - x1;
+    const slope = dy / dx;                   
+    const slopeRounded = slope.toFixed(2);   
+
+    // Mostrar la pendiente en pantalla
+    slopeDisplay.textContent = ` m (Decimal): ${slope} | m (Redondeda): ${slopeRounded}`;
 
     // Determinar los valores mínimos y máximos para ajustar la escala
     const minX = Math.min(x1, x2, 0);
@@ -47,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fillStyle = "Black";
     ctx.strokeStyle = "lightgray";
 
+    // Ejes en X
     for (let x = Math.floor(minX); x <= Math.ceil(maxX); x++) {
       const xPos = padding + (x - minX) * scaleX;
       ctx.beginPath();
@@ -56,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillText(x, xPos, canvas.height - padding + 12);
     }
 
+    // Ejes en Y
     for (let y = Math.floor(minY); y <= Math.ceil(maxY); y++) {
       const yPos = canvas.height - padding - (y - minY) * scaleY;
       ctx.beginPath();
@@ -65,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillText(y, padding - 12, yPos + 3);
     }
 
-    // Dibujar los ejes principales
+    // Dibujar ejes principales
     ctx.strokeStyle = "red";
     ctx.beginPath();
     const zeroX = padding + (0 - minX) * scaleX;
@@ -111,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
       y += yIncrement;
     }
 
-    // Dibujar la línea continua
     ctx.strokeStyle = "blue";
     ctx.lineWidth = 1.5;
     ctx.stroke();
@@ -121,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const xPos = padding + (x - minX) * scaleX;
     const yPos = canvas.height - padding - (y - minY) * scaleY;
     ctx.fillStyle = color;
-    ctx.fillRect(xPos - 1, yPos - 1, 3, 3); // Punto de tamaño 3x3
+    ctx.fillRect(xPos - 1, yPos - 1, 3, 3);
   }
 
   function addTableRow(tableBody, iteration, x, y) {
