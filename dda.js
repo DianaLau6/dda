@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fillStyle = "Black";
     ctx.strokeStyle = "lightgray";
 
-    // Dibujar cuadrículas relevantes para todos los cuadrantes
     for (let x = Math.floor(minX); x <= Math.ceil(maxX); x++) {
       const xPos = padding + (x - minX) * scaleX;
       ctx.beginPath();
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dibujar los ejes principales
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = "red";
     ctx.beginPath();
     const zeroX = padding + (0 - minX) * scaleX;
     const zeroY = canvas.height - padding - (0 - minY) * scaleY;
